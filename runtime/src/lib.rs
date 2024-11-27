@@ -218,7 +218,13 @@ mod runtime {
 	#[runtime::pallet_index(6)]
 	pub type Sudo = pallet_sudo;
 
-	// Include the custom logic from the pallet-template in the runtime.
 	#[runtime::pallet_index(7)]
+	pub type Contracts = pallet_contracts;
+
+	#[runtime::pallet_index(8)]
+	pub type RandomnessCollectiveFlip = pallet_insecure_randomness_collective_flip;
+
+	// Include the custom logic from the pallet-template in the runtime.
+	#[runtime::pallet_index(9)]
 	pub type TemplateModule = pallet_template;
 }
