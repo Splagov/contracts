@@ -26,13 +26,13 @@
 // Substrate and Polkadot dependencies
 use frame_support::{
 	derive_impl, parameter_types,
-	traits::{ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, VariantCountOf},
+	traits::{AsEnsureOriginWithArg, ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, VariantCountOf},
 	weights::{
 		constants::{RocksDbWeight, WEIGHT_REF_TIME_PER_SECOND},
 		IdentityFee, Weight,
 	},
 };
-use frame_system::{EnsureSigned, limits::{BlockLength, BlockWeights}};
+use frame_system::{EnsureRoot, EnsureSigned, limits::{BlockLength, BlockWeights}};
 use pallet_transaction_payment::{ConstFeeMultiplier, FungibleAdapter, Multiplier};
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_runtime::{traits::One, Perbill};
@@ -158,6 +158,40 @@ impl frame_support::traits::Contains<RuntimeCall> for AllowBalancesCall {
 	fn contains(call: &RuntimeCall) -> bool {
 		matches!(call, RuntimeCall::Balances(BalancesCall::transfer_allow_death { .. }))
 	}
+}
+
+pub const MILLI_TOKEN: Balance = 1_000_000_000_000_000;
+pub const TOKEN: Balance = 1000 * MILLI_TOKEN;
+
+parameter_types! {
+	pub const AssetDeposit: Balance = 100 * TOKEN;
+	pub const ApprovalDeposit: Balance = TOKEN;
+	pub const StringLimit: u32 = 50;
+	pub const MetadataDepositBase: Balance = 10 * TOKEN;
+	pub const MetadataDepositPerByte: Balance = TOKEN;
+}
+
+impl pallet_assets::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = u128;
+	type AssetId = u32;
+	type AssetIdParameter = codec::Compact<u32>;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<TOKEN>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type CallbackHandle = ();
+	type WeightInfo = pallet_assets::weights::SubstrateWeight<Runtime>;
+	type RemoveItemsLimit = ConstU32<1000>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 // Unit = the base number of indivisible units for balances

@@ -224,7 +224,10 @@ mod runtime {
 	#[runtime::pallet_index(8)]
 	pub type RandomnessCollectiveFlip = pallet_insecure_randomness_collective_flip;
 
-	// Include the custom logic from the pallet-template in the runtime.
 	#[runtime::pallet_index(9)]
+	pub type Assets = pallet_assets;
+
+	// Include the custom logic from the pallet-template in the runtime.
+	#[runtime::pallet_index(10)]
 	pub type TemplateModule = pallet_template;
 }

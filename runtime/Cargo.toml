@@ -25,6 +25,7 @@ frame-system.workspace = true
 frame-try-runtime = { optional = true, workspace = true }
 frame-executive.workspace = true
 frame-metadata-hash-extension.workspace = true
+pallet-assets.workspace = true
 pallet-aura.workspace = true
 pallet-balances.workspace = true
 pallet-contracts.workspace = true
@@ -71,6 +72,7 @@ std = [
 	"frame-benchmarking?/std",
 	"frame-try-runtime?/std",
 
+	"pallet-assets/std",
 	"pallet-aura/std",
 	"pallet-balances/std",
 	"pallet-contracts/std",
