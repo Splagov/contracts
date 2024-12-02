@@ -111,7 +111,32 @@ fn testnet_genesis(
 		},
 		"sudo": {
 			// Assign network admin rights.
-			"key": Some(root_key),
+			"key": Some(root_key.clone()),
+		},
+		"assets": {
+			"assets": vec![
+				// id, owner, is_sufficient, min_balance
+				(999, root_key.clone(), true, 1),
+				(888, root_key.clone(), true, 1),
+			],
+			"metadata": vec![
+				// id, name, symbol, decimals
+				(999, "Bitcoin".as_bytes(), "BTC".as_bytes(), 8),
+				(888, "Token".as_bytes(), "TKN".as_bytes(), 18),
+			],
+			"accounts": vec![
+				// id, account_id, balance
+				(
+					999u32,
+					AccountPublic::from(get_from_seed::<sr25519::Public>("Alice")).into_account(),
+					1_000_000_000_000_000_000_000_000u128
+				),
+				(
+					888u32,
+					AccountPublic::from(get_from_seed::<sr25519::Public>("Bob")).into_account(),
+					1_000_000_000_000_000_000_000_000u128
+				),
+			],
 		},
 	})
 }
